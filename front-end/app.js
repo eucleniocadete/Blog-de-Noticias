@@ -61,9 +61,9 @@ async function publicarNoticia(){
 }
 
 async function mostrarNoticia() {
-    const filtro = filtro.value
+    const dados = filtro.value
 
-    let req = await fetch(`http://localhost:3000/noticias_filtro/${filtro}`)
+    let req = await fetch(`http://localhost:3000/noticias_filtro/${dados}`)
     let res = await req.json()
     
     res.forEach(element =>{
