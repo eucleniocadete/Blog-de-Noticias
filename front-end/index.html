@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Portal de Noticias</title>
+</head>
+<body>
+    <div id="main">
+        <header>
+            <div id="portal">
+                <h1>Portal de Noticias</h1>
+                <span>Fique por dentro das ultimas noticias e acontecimentos</span>
+            </div>
+            <div class="publicar-mae">
+                <div class="publicar">
+                    <a href="./login/login.html">Entrar para publicar</a>
+                </div>
+                <div class="entrar">
+                    <a href="./login/login.html">Entrar</a>
+                </div>
+                <div class="cadastrar">
+                    <a href="./cadastro/index.html">Cadastrar</a>
+                </div>
+                <div class="logado" onclick="mostrarModal()">
+                    <span>Publicar Notícia</span>
+                </div>
+                <div class="logout" onclick="logout()">
+                    <span>Sair</span>
+                </div>
+            </div>
+        </header>
+        <main>
+            <form class="buscar" onsubmit="return pesquisar()">
+                <input type="text" id="input_buscar" placeholder="Buscar noticias" required>
+                <button type="submit">Pesquisar</button>
+                <select id="filtro" onclick="mostrarNoticia()">
+                    <option value="Todas">Todas</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="saude">Saude</option>
+                    <option value="economia">Economia</option>
+                    <option value="politica">Politica</option>
+                    <option value="entretenimento">Entretenimento</option>
+                </select>
+            </form>
+            <div class="noticias"></div>
+            
+        </main>
+    </div>
+    <div class="modal-mae">
+        <form onsubmit="return publicarNoticia()" class="modal">
+            <div class="section">
+                <h3>Publicar Nova Notícia</h3>
+                <p class="text">Preencha todos campos abaixo para publicar uma nova notícia.</p>
+            </div>
+            <div class="body">
+                <label>Título</label>
+                <input type="text" id="titulo" placeholder="Escreva o Título da Notícia" name="titulo" required>
+
+                <label>Categoria</label>
+                <select name="" id="categoria">
+                    <option value="">Selecione uma categoria</option>
+                    <option value="Tecnologia">Tecnologia</option>
+                    <option value="Saude">Saude</option>
+                    <option value="Economia">Economia</option>
+                    <option value="Politica">Politica</option>
+                    <option value="Entretenimento">Entretenimento</option>
+                </select>
+
+                <label for="">Conteudo</label>
+                <textarea type="text" id="descricao"  placeholder="Digite o conteudo da notícia" name="descricao" required></textarea>
+                <div class="botoes">
+                    <button type="button" class="botao1" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="botao2">Publicar</button>
+                </div>
+                
+            </div>
+        </form>
+    </div>
+    
+</body>
+</html>
+<script src="app.js" defer></script>

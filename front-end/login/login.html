@@ -1,0 +1,36 @@
+<script src="./login.js" defer>
+    if(localStorage.getItem("logado")){
+        location.href = "../index.html"
+    }
+</script>
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Login</title>
+</head>
+<body>
+    <form onsubmit="return login()">
+        <div class="header">
+            <h1>Entrar na sua conta</h1>
+            <span>Digite seu email e senha para acessar o portal noticias</span>
+            <div class="errado">
+                <span>Email ou senha incorretos</span>
+            </div>
+        </div>
+        <div class="body">
+            <label for="">Email</label>
+            <input type="email" name="email" id="email" placeholder="Seu email" required>
+            <label for="">Senha</label>
+            <input type="password" name="senha" id="senha" placeholder="Digite sua senha" required>
+            <button type="submit">Entrar</button>
+        </div>
+        <div class="cadastrar">
+            <span>Não tem uma conta? <a href="../cadastro/index.html">Cadastre-se</a></span>
+        </div>
+    </form>
+    
+</body>
+</html>
