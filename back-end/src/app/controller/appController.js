@@ -35,6 +35,15 @@ class blogController{
         }
     }
 
-    async noticias_filtro(req, res){}
+    async noticias_filtro(req, res){
+        const dados = req.params.filtro
+
+        try {
+            const filtroResult = await blogViews.noticias_filtro(dados)
+            res.status(200).json(filtroResult)
+        } catch (error) {
+            res.status(500).json({erro: error})
+        }
+    }
 }
 export default new blogController()

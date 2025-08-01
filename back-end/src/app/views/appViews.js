@@ -53,6 +53,38 @@ class blogViews{
             return {erro: error}
         }
     }
+
+    async noticias_filtro(filtro){
+        const consultas = [
+            "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_noticias.data, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.id_categoria=tb_categoria.id",
+            "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_noticias.data, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.id_categoria=tb_categoria.id AND tb_categoria.categoria=?"
+        ]
+
+        try {
+            if(filtro == "Todas"){
+                const resultConsulta = await fazerConsulta(consultas[0], "Não foi possível carregar as noticias :(")
+
+                resultConsulta.forEach(element => {
+                    element.data = dayjs(element.data).format("DD/MM/YYYY")
+                })
+                
+                return resultConsulta
+            }
+            
+            const resultConsulta = await fazerConsulta(consultas[1], filtro, "Não foi possível carregar as noticias :(")
+
+            resultConsulta.forEach(element => {
+                element.data = dayjs(element.data).format("DD/MM/YYYY")
+            })
+
+            if(resultConsulta.length == 0)
+                return {erro: "Selecione uma categoria válida :("}
+
+            return resultConsulta
+        } catch (error) {
+            return {erro: error}
+        }
+    }
 }
 
 async function emailValido(email){
