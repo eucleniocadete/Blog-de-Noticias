@@ -37,12 +37,14 @@ async function mostrarNoticias() {
 
 function fecharModal(){
     modal.style.display = "none"
+    document.body.style.overflow = "scroll"
 
     if(localStorage.getItem("EntrarPublicar"))
         localStorage.removeItem("EntrarPublicar")
 }
 function mostrarModal(){
     modal.style.display = "flex"
+    document.body.style.overflow = "hidden"
 }
 
 async function publicarNoticia(){
@@ -112,19 +114,23 @@ async function pesquisar() {
         "entrou": entrou
     }
 
-    let req = await fetch("./back-end/pesquisar.php", {
+    let req = await fetch("http://localhost:3000/pesquisar", {
         method: "post",
+        headers: {
+            "content-type": "application/json"
+        },
         body: JSON.stringify(pesquisa)
     })
 
     let res = await req.json()
     
-    if(!res.erro){
-        noticia(res)
-
-    } else{
+    if(res.naoEntrou)
+        alert(res.naoEntrou)
+    else if(res.erro)
         alert(res.erro)
-    }
+    else
+        noticia(res)
+    
 }
 
 function noticia(resposta){
