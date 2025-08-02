@@ -16,7 +16,14 @@ document.addEventListener("DOMContentLoaded", () =>{
     }
 
     mostrarNoticias()
+
+    if(localStorage.getItem("EntrarPublicar"))
+        mostrarModal()
 })
+
+function entrarPublicar(){
+    localStorage.setItem("EntrarPublicar", true)
+} 
 
 async function mostrarNoticias() {
     const req = await fetch("http://localhost:3000/noticias")
@@ -30,6 +37,9 @@ async function mostrarNoticias() {
 
 function fecharModal(){
     modal.style.display = "none"
+
+    if(localStorage.getItem("EntrarPublicar"))
+        localStorage.removeItem("EntrarPublicar")
 }
 function mostrarModal(){
     modal.style.display = "flex"
@@ -38,25 +48,33 @@ function mostrarModal(){
 async function publicarNoticia(){
     event.preventDefault()
 
-    let noticia = {
+    const noticia = {
         "titulo": titulo.value.trim(),
         "categoria": categoria.value,
         "descricao": descricao.value.trim()
     }
 
-    requisicao = await fetch("./back-end/api.php", {
+    requisicao = await fetch("http://localhost:3000/publicar", {
         method: "post",
+        headers: {
+            "content-type": "application/json"
+        },
         body: JSON.stringify(noticia)
     })
 
     resposta = await requisicao.json()
-    if(resposta.sucesso){
+    if(resposta.existe)
+        alert(resposta.existe)
+    else if(resposta.sucesso){
         alert(resposta.sucesso)
         fecharModal()
         location.reload()
-    } else{
-        alert(resposta.erro)
     }
+    else if(resposta.invalida)
+        alert(resposta.invalida)
+    else
+        alert(resposta.erro)
+    
 
 }
 
