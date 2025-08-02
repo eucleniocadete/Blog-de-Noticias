@@ -22,9 +22,13 @@ class blogViews{
         const email = await emailValido(dados.email)
         
         if(email && senhaValida(dados.senha, dados.senha2) && nomeValido(dados.nome)){
-            
-            fazerConsulta(consulta, [dados.nome, dados.email, dados.senha], "Erro ao cadastrar :(")
-            return {sucesso: "Conta criada com sucesso :)"}
+            try {
+                fazerConsulta(consulta, [dados.nome, dados.email, dados.senha], "Erro ao cadastrar :(")
+                return {sucesso: "Conta criada com sucesso :)"}
+                
+            } catch (error) {
+                return {erro: error}
+            }
         }
         else{
             if(!senhaValida(dados.senha, dados.senha2))
@@ -85,11 +89,47 @@ class blogViews{
             return {erro: error}
         }
     }
+
+    async publicar(dados){
+        const consultas = [
+            "SELECT id FROM tb_categoria WHERE categoria=?",
+            "INSERT INTO tb_noticias (titulo, id_categoria, conteudo) VALUES (?, ?, ?)", 
+            "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.titulo=? AND tb_noticias.conteudo=?"
+        ]
+
+        try {
+            const id_categoria = await fazerConsulta(consultas[0], dados.categoria, "Erro ao publicar notícia :(")
+            if(id_categoria.length == 0)
+                return {invalida: "Categoria Inválida :("}
+            
+            try {
+                const resultConsulta = await fazerConsulta(consultas[2], [dados.titulo, dados.descricao], "Erro ao publicar noticia :(")
+
+                if(resultConsulta.length > 0)
+                    return {existe: "Essa notícia já foi publicada :("}
+
+                try {
+
+                    fazerConsulta(consultas[1], [dados.titulo, id_categoria[0].id, dados.descricao], "Não foi possível publicar :(")
+                    return {sucesso: "Noticia publicada com sucesso :)"}
+                    
+                } catch (error) {
+                    return {erro: error}
+                }
+
+            } catch (error) {
+                return {erro: error}
+            }
+
+        } catch (error) {
+            return {erro: error}
+        }
+    }
 }
 
 async function emailValido(email){
     const consulta = "SELECT email FROM tb_usuarios WHERE email=?"
-    const valido = email.toUpperCase()
+    const valido = email.toLowerCase()
     try {
         const resultConsulta = await fazerConsulta(consulta, valido, "Erro ao acessar email :(")
         if(resultConsulta.length == 0)

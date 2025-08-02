@@ -20,7 +20,7 @@ class blogController{
 
         try {
             const cadastroResult = await blogViews.cadastro(dados)
-            res.json(cadastroResult)
+            res.status(201).json(cadastroResult)
         } catch (error) {
             res.status(500).json(error)
         }
@@ -40,7 +40,29 @@ class blogController{
 
         try {
             const filtroResult = await blogViews.noticias_filtro(dados)
-            res.status(200).json(filtroResult)
+            if(filtroResult.erro)
+                res.status(500).json(filtroResult)
+            else
+                res.status(200).json(filtroResult)
+        } catch (error) {
+            res.status(500).json({erro: error})
+        }
+    }
+
+    async publicar(req, res){
+        const dados = req.body
+
+        try {
+            const resultPublicar = await blogViews.publicar(dados)
+            if(resultPublicar.invalida)
+                res.status(404).json(resultPublicar)
+            else if(resultPublicar.erro)
+                res.status(500).json(resultPublicar)
+            else if(resultPublicar.existe)
+                res.status(208).json(resultPublicar)
+            else
+                res.status(201).json(resultPublicar)
+
         } catch (error) {
             res.status(500).json({erro: error})
         }
