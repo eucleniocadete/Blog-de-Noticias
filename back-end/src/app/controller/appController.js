@@ -40,8 +40,8 @@ class blogController{
 
         try {
             const filtroResult = await blogViews.noticias_filtro(dados)
-            if(filtroResult.erro)
-                res.status(500).json(filtroResult)
+            if(filtroResult.vazio)
+                res.status(404).json(filtroResult)
             else
                 res.status(200).json(filtroResult)
         } catch (error) {

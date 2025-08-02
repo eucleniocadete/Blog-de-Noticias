@@ -92,8 +92,8 @@ async function mostrarNoticia() {
         }
     })
 
-    if(res.erro){
-        alert(res.erro)
+    if(res.vazio){
+        alert(res.vazio)
     } else{
         noticia(res)
     }
