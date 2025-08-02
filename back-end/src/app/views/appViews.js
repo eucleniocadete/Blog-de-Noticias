@@ -82,7 +82,7 @@ class blogViews{
         try {
             const resultConsulta = await fazerConsulta(consultas[1], filtro, "Não foi possível carregar as noticias :(")
             if(resultConsulta.length == 0)
-                return {vazio: "Não existe notícia nessa categoria"}
+                return {vazio: "Não existe notícia nessa categoria ou categoria inválida"}
     
             resultConsulta.forEach(element => {
                 element.data = dayjs(element.data).format("DD/MM/YYYY")
