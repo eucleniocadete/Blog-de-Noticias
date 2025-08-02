@@ -8,6 +8,7 @@ router.post("/cadastro", blogController.cadastro)
 router.get("/noticias", blogController.noticias)
 router.get("/noticias_filtro/:filtro", blogController.noticias_filtro)
 router.post("/publicar", blogController.publicar)
+router.post("/pesquisar", blogController.persquisar)
 
 
 export default router

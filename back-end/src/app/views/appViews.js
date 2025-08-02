@@ -94,8 +94,11 @@ class blogViews{
         const consultas = [
             "SELECT id FROM tb_categoria WHERE categoria=?",
             "INSERT INTO tb_noticias (titulo, id_categoria, conteudo) VALUES (?, ?, ?)", 
-            "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.titulo=? AND tb_noticias.conteudo=?"
+            "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.titulo LIKE ? AND tb_noticias.conteudo LIKE ?"
         ]
+
+        const titulo = "%"+dados.titulo+"%"
+        const conteudo = "%"+dados.descricao+"%"
 
         try {
             const id_categoria = await fazerConsulta(consultas[0], dados.categoria, "Erro ao publicar notícia :(")
@@ -103,7 +106,7 @@ class blogViews{
                 return {invalida: "Categoria Inválida :("}
             
             try {
-                const resultConsulta = await fazerConsulta(consultas[2], [dados.titulo, dados.descricao], "Erro ao publicar noticia :(")
+                const resultConsulta = await fazerConsulta(consultas[2], [titulo, conteudo], "Erro ao publicar noticia :(")
 
                 if(resultConsulta.length > 0)
                     return {existe: "Essa notícia já foi publicada :("}
@@ -125,6 +128,33 @@ class blogViews{
             return {erro: error}
         }
     }
+
+    async pesquisar(dados){
+        const consulta = "SELECT tb_noticias.titulo, tb_noticias.conteudo, tb_noticias.data, tb_categoria.categoria FROM tb_noticias JOIN tb_categoria ON tb_noticias.id_categoria=tb_categoria.id AND tb_noticias.titulo like ?"
+
+        if(dados.entrou){
+            try {
+                const titulo = "%"+dados.pesquisa+"%"
+                const noticias = await fazerConsulta(consulta, titulo, "Falha na pesquisa :(")
+                
+                noticias.forEach(element => {
+                    element.data = dayjs(element.data).format("DD/MM/YYYY")
+                })
+        
+                if(noticias.length == 0)
+                    return {naoExiste: "Pesquisa não encontrada :("}
+                return noticias
+    
+            } catch (error) {
+                return {erro: error}
+            }
+
+        }
+
+        return {naoEntrou: "Faça login para publicar"}
+
+    }
+
 }
 
 async function emailValido(email){

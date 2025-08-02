@@ -67,5 +67,20 @@ class blogController{
             res.status(500).json({erro: error})
         }
     }
+
+    async persquisar(req, res){
+        const dados = req.body
+
+        try {
+            const resultPesquisa = await blogViews.pesquisar(dados)
+            if(resultPesquisa.naoExiste)
+                res.status(404).json(resultPesquisa)
+            else
+                res.status(200).json(resultPesquisa)
+            
+        } catch (error) {
+            res.status(500).json({erro: error})
+        }
+    }
 }
 export default new blogController()
